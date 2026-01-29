@@ -66,6 +66,8 @@ jobs:
           # Enable integration tests and set test tags (empty = all tests)
           HELM_ARGS="$HELM_ARGS --set integrationTests.install=true"
           HELM_ARGS="$HELM_ARGS --set integrationTests.tags=${{ github.event.inputs.test_tags }}"
+          # Use custom image with S3 upload scripts
+          HELM_ARGS="$HELM_ARGS --set integrationTests.image=ghcr.io/elbe0116/qubership-zookeeper-integration-tests:main"
           
           # Secrets - S3 credentials for test results upload
           [ -n "${{ secrets.S3_AWS_ACCESS_KEY_ID }}" ] && HELM_ARGS="$HELM_ARGS --set integrationTests.atpStorage.username=${{ secrets.S3_AWS_ACCESS_KEY_ID }}"
