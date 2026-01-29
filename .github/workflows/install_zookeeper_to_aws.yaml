@@ -128,7 +128,7 @@ jobs:
             s3:
               enabled: true
               url: "https://s3.us-east-1.amazonaws.com"
-              bucket: "qstp-zookeeper"
+              bucket: "qstp-consul"
               region: "us-east-1"
             securityContext:
               fsGroup: 1000
