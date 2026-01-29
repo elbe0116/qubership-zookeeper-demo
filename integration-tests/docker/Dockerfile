@@ -1,5 +1,8 @@
 FROM ghcr.io/elbe0116/qubership-docker-integration-tests:PSUPATPOS-63
 
+# Switch to root for installation
+USER root
+
 ENV ROBOT_OUTPUT=${ROBOT_HOME}/output \
     DISTR_DIR=/tmp/deps \
     SERVICE_CHECKER_SCRIPT=${ROBOT_HOME}/zookeeper_pods_checker.py \
