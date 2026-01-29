@@ -103,6 +103,8 @@ jobs:
           global:
             tls:
               enabled: false
+            securityContext:
+              fsGroup: 1000
           zooKeeper:
             tls:
               enabled: false
@@ -116,6 +118,9 @@ jobs:
               limits:
                 cpu: 200m
                 memory: 512Mi
+            securityContext:
+              fsGroup: 1000
+              runAsUser: 1000
           backupDaemon:
             install: true
             tls:
@@ -125,6 +130,8 @@ jobs:
               url: "https://s3.us-east-1.amazonaws.com"
               bucket: "qstp-zookeeper"
               region: "us-east-1"
+            securityContext:
+              fsGroup: 1000
           integrationTests:
             affinity: null
           EOF
