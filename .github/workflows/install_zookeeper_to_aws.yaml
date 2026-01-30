@@ -113,7 +113,10 @@ jobs:
                 adminPassword: "admin123"
                 clientUsername: "client"
                 clientPassword: "client123"
+          operator:
+            dockerImage: ghcr.io/elbe0116/qubership-zookeeper-operator:PSUPATPOS-80
           zooKeeper:
+            dockerImage: ghcr.io/elbe0116/qubership-docker-zookeeper:PSUPATPOS-80
             tls:
               enabled: false
             storage:
@@ -129,7 +132,10 @@ jobs:
             securityContext:
               fsGroup: 1000
               runAsUser: 1000
+          monitoring:
+            dockerImage: ghcr.io/elbe0116/qubership-zookeeper-monitoring:PSUPATPOS-80
           backupDaemon:
+            dockerImage: ghcr.io/elbe0116/qubership-zookeeper-backup-daemon:PSUPATPOS-80
             install: true
             tls:
               enabled: false
@@ -142,6 +148,7 @@ jobs:
               fsGroup: 1000
           integrationTests:
             affinity: null
+            pvType: "standalone"
           EOF
           HELM_ARGS="$HELM_ARGS -f /tmp/aws-values.yaml"
           
