@@ -94,55 +94,55 @@ jobs:
           # Format requires registry:port so split by ':' gives 3 parts (test uses parts[-1] for tag)
           # Using temp file to avoid shell escaping issues with spaces and special chars
           cat > /tmp/monitored-images-values.yaml << 'EOF'
-integrationTests:
-  monitoredImages: "deployment zookeeper-service-operator zookeeper-service-operator ghcr.io:443/elbe0116/qubership-zookeeper-operator:PSUPATPOS-80,deployment zookeeper-1 zookeeper ghcr.io:443/elbe0116/qubership-docker-zookeeper:PSUPATPOS-80,deployment zookeeper-monitoring zookeeper-monitoring ghcr.io:443/elbe0116/qubership-zookeeper-monitoring:PSUPATPOS-80,deployment zookeeper-backup-daemon zookeeper-backup-daemon ghcr.io:443/elbe0116/qubership-zookeeper-backup-daemon:PSUPATPOS-80,deployment zookeeper-integration-tests-runner zookeeper-integration-tests-runner ghcr.io:443/elbe0116/qubership-zookeeper-integration-tests:PSUPATPOS-80"
-EOF
+          integrationTests:
+            monitoredImages: "deployment zookeeper-service-operator zookeeper-service-operator ghcr.io:443/elbe0116/qubership-zookeeper-operator:PSUPATPOS-80,deployment zookeeper-1 zookeeper ghcr.io:443/elbe0116/qubership-docker-zookeeper:PSUPATPOS-80,deployment zookeeper-monitoring zookeeper-monitoring ghcr.io:443/elbe0116/qubership-zookeeper-monitoring:PSUPATPOS-80,deployment zookeeper-backup-daemon zookeeper-backup-daemon ghcr.io:443/elbe0116/qubership-zookeeper-backup-daemon:PSUPATPOS-80,deployment zookeeper-integration-tests-runner zookeeper-integration-tests-runner ghcr.io:443/elbe0116/qubership-zookeeper-integration-tests:PSUPATPOS-80"
+          EOF
           HELM_ARGS="$HELM_ARGS -f /tmp/monitored-images-values.yaml"
           
           # AWS EKS configuration
           # Use temp file to avoid shell escaping issues
           cat > /tmp/aws-values.yaml << 'EOF'
-global:
-  tls:
-    enabled: false
-  securityContext:
-    fsGroup: 1000
-  secrets:
-    zooKeeper:
-      adminUsername: "admin"
-      adminPassword: "admin123"
-      clientUsername: "client"
-      clientPassword: "client123"
-zooKeeper:
-  tls:
-    enabled: false
-  storage:
-    className:
-      - gp2
-  resources:
-    requests:
-      cpu: 50m
-      memory: 256Mi
-    limits:
-      cpu: 200m
-      memory: 512Mi
-  securityContext:
-    fsGroup: 1000
-    runAsUser: 1000
-backupDaemon:
-  install: true
-  tls:
-    enabled: false
-  s3:
-    enabled: true
-    url: "https://s3.us-east-1.amazonaws.com"
-    bucket: "qstp-consul"
-    region: "us-east-1"
-  securityContext:
-    fsGroup: 1000
-integrationTests:
-  affinity: null
-EOF
+          global:
+            tls:
+              enabled: false
+            securityContext:
+              fsGroup: 1000
+            secrets:
+              zooKeeper:
+                adminUsername: "admin"
+                adminPassword: "admin123"
+                clientUsername: "client"
+                clientPassword: "client123"
+          zooKeeper:
+            tls:
+              enabled: false
+            storage:
+              className:
+                - gp2
+            resources:
+              requests:
+                cpu: 50m
+                memory: 256Mi
+              limits:
+                cpu: 200m
+                memory: 512Mi
+            securityContext:
+              fsGroup: 1000
+              runAsUser: 1000
+          backupDaemon:
+            install: true
+            tls:
+              enabled: false
+            s3:
+              enabled: true
+              url: "https://s3.us-east-1.amazonaws.com"
+              bucket: "qstp-consul"
+              region: "us-east-1"
+            securityContext:
+              fsGroup: 1000
+          integrationTests:
+            affinity: null
+          EOF
           HELM_ARGS="$HELM_ARGS -f /tmp/aws-values.yaml"
           
           echo "Helm additional args: $HELM_ARGS"
