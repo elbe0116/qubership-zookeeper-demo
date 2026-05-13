@@ -9,7 +9,34 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [main]
-
+    paths-ignore:
+      - "docs/**"
+      - "CODE-OF-CONDUCT.md"
+      - "CONTRIBUTING.md"
+      - "LICENSE"
+      - "README.md"
+      - "SECURITY.md"
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "CODE-OF-CONDUCT.md"
+      - "CONTRIBUTING.md"
+      - "LICENSE"
+      - "README.md"
+      - "SECURITY.md"
+  workflow_dispatch:
+    inputs:
+      repository_name:
+        description: Repository with ZooKeeper service (use your fork if the branch exists only there)
+        required: false
+        type: string
+        default: ""
+      service_branch:
+        description: Branch of the ZooKeeper service repo to test
+        required: false
+        type: string
+        default: main
 
 jobs:
   Wait-for-images:
@@ -18,6 +45,7 @@ jobs:
       conclusion: ${{ steps.wait.outputs.conclusion }}
     steps:
       - name: Wait for dev_build.yml to complete
+        if: github.event_name != 'workflow_dispatch'
         uses: netcracker/qubership-workflow-hub/actions/wait-for-workflow@396774180000abdb825cbf150b56cc59c6913db8  #v2.0.5
         id: wait
         with:
@@ -28,7 +56,8 @@ jobs:
     needs: Wait-for-images
     uses: Netcracker/qubership-test-pipelines/.github/workflows/zookeeper.yaml@cee02b3e1a049e1c2b28f8566d4362247240fa5f  #v1.1.2
     with:
-      service_branch: '${{ github.head_ref || github.ref_name }}'
+      repository_name: ${{ github.event_name == 'workflow_dispatch' && (inputs.repository_name != '' && inputs.repository_name || github.repository) || 'Netcracker/qubership-zookeeper' }}
+      service_branch: ${{ github.event_name == 'workflow_dispatch' && inputs.service_branch || (github.head_ref || github.ref_name) }}
       versions_file: '.github/versions.yaml'
       pipeline_branch: 'cee02b3e1a049e1c2b28f8566d4362247240fa5f' #this value must match the value after '@' in 'uses'
     secrets:
