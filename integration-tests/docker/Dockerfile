@@ -1,4 +1,4 @@
-FROM ghcr.io/netcracker/qubership-docker-integration-tests:main
+FROM ghcr.io/elbe0116/qubership-docker-integration-tests:fix-atp-integration-tags
 
 # Switch to root for installation
 USER root
