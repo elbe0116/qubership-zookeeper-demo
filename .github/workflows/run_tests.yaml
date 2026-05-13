@@ -37,6 +37,11 @@ on:
         required: false
         type: string
         default: main
+      integration_tests_tags:
+        description: Robot integrationTests.tags (env TAGS), e.g. zookeeperNOTtransactional_backup. Leave empty for template defaults.
+        required: false
+        type: string
+        default: ""
 
 jobs:
   Wait-for-images:
@@ -54,12 +59,14 @@ jobs:
           poll-interval: 20
   Zookeeper-Pipeline:
     needs: Wait-for-images
-    uses: Netcracker/qubership-test-pipelines/.github/workflows/zookeeper.yaml@cee02b3e1a049e1c2b28f8566d4362247240fa5f  #v1.1.2
+    # Fork main: releases/latest 404 fallback, optional integration_tests_tags -> helm_deploy test_tags override.
+    # After Netcracker merges the same workflow, switch to Netcracker/...@<sha> and matching pipeline_branch.
+    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@main
     with:
       repository_name: ${{ github.event_name == 'workflow_dispatch' && (inputs.repository_name != '' && inputs.repository_name || github.repository) || 'Netcracker/qubership-zookeeper' }}
       service_branch: ${{ github.event_name == 'workflow_dispatch' && inputs.service_branch || (github.head_ref || github.ref_name) }}
-      versions_file: '.github/versions.yaml'
-      pipeline_branch: 'cee02b3e1a049e1c2b28f8566d4362247240fa5f' #this value must match the value after '@' in 'uses'
+      pipeline_branch: main
+      test_tags: ${{ github.event_name == 'workflow_dispatch' && inputs.integration_tests_tags || '' }}
     secrets:
       AWS_S3_ACCESS_KEY_ID: ${{secrets.AWS_S3_ACCESS_KEY_ID}}
       AWS_S3_ACCESS_KEY_SECRET: ${{secrets.AWS_S3_ACCESS_KEY_SECRET}}
