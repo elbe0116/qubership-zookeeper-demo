@@ -349,7 +349,7 @@ integrationTests:
     }
   }
   image: "ghcr.io/netcracker/qubership-zookeeper-integration-tests:main"
-  tags: "zookeeperNOTtransactional_backup"
+  tags: "zookeeper_crud"
   # Please override "url" parameter with "6443" port for Kubernetes environment and "8443" for Openshift environment
   url: "https://kube.com:6443"
   zookeeperIsManagedByOperator: true
