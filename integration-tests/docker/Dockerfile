@@ -1,5 +1,9 @@
-FROM ghcr.io/elbe0116/qubership-docker-integration-tests:fix-atp-integration-tags
-
+# Base layer for adapter-S3 + entrypoint. Default tag is mutable; pin with digest when debugging:
+#   ghcr.io/elbe0116/qubership-docker-integration-tests@sha256:<digest> (GHCR → package → version digest).
+# CI: run "CI: Dev Build" via workflow_dispatch and set "integration_tests_base_image" to pass build-arg ATP_BASE_IMAGE.
+# Local: docker build --build-arg ATP_BASE_IMAGE='...@sha256:...' -f integration-tests/docker/Dockerfile integration-tests
+ARG ATP_BASE_IMAGE=ghcr.io/elbe0116/qubership-docker-integration-tests:fix-atp-integration-tags
+FROM ${ATP_BASE_IMAGE}
 # Switch to root for installation
 USER root
 

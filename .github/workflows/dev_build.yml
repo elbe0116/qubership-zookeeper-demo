@@ -25,6 +25,14 @@ on:
       - "SECURITY.md"
   workflow_dispatch:
     inputs:
+      integration_tests_base_image:
+        required: false
+        type: string
+        default: ""
+        description: >
+          Optional pin for integration-tests base image (Dockerfile ARG ATP_BASE_IMAGE).
+          Full ref with digest, e.g. ghcr.io/elbe0116/qubership-docker-integration-tests@sha256:... (from GHCR package version).
+          Leave empty to use the Dockerfile default (tag fix-atp-integration-tags).
       tags:
         required: false
         type: string
@@ -117,5 +125,6 @@ jobs:
           component: ${{ toJson(matrix.component) }}
           platforms: ${{ needs.prepare.outputs.platforms }}
           tags: ${{ needs.prepare.outputs.tags }}
+          build-args: ${{ github.event_name == 'workflow_dispatch' && inputs.integration_tests_base_image != '' && format('ATP_BASE_IMAGE={0}', inputs.integration_tests_base_image) || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
