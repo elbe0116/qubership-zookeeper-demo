@@ -1,8 +1,5 @@
-# Base image must come from qubership-docker-integration-tests-demo (adapter-S3 + docker-entrypoint.sh).
-# ghcr.io/<owner>/qubership-docker-integration-tests is built by that repo's push.yml; tag follows the branch (slashes → underscores).
-# Pin was "fix-atp-integration-tags" and never picked up demo adapter updates.
-ARG ATP_BASE_IMAGE=ghcr.io/elbe0116/qubership-docker-integration-tests:feat_atp-integration
-FROM ${ATP_BASE_IMAGE}
+FROM ghcr.io/elbe0116/qubership-docker-integration-tests:fix-atp-integration-tags
+
 # Switch to root for installation
 USER root
 
