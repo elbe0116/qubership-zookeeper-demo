@@ -59,13 +59,13 @@ jobs:
           poll-interval: 20
   Zookeeper-Pipeline:
     needs: Wait-for-images
-    # Pinned fork commit: 404/test_tags + check_tests tail + verify dump on failure + check_resources tail while 0/1.
-    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@60a194167ab493d14594e646842874712fab9754
+    # Pinned fork: ATP S3 creds via helm_deploy --set-string; repo secrets S3_AWS_* mapped to workflow_call secrets.
+    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@40c6c95927e11ecf1038e0489eba9f6cf2817ec2
     with:
       repository_name: ${{ github.event_name == 'workflow_dispatch' && (inputs.repository_name != '' && inputs.repository_name || github.repository) || 'Netcracker/qubership-zookeeper' }}
       service_branch: ${{ github.event_name == 'workflow_dispatch' && inputs.service_branch || (github.head_ref || github.ref_name) }}
-      pipeline_branch: '60a194167ab493d14594e646842874712fab9754'
+      pipeline_branch: '40c6c95927e11ecf1038e0489eba9f6cf2817ec2'
       test_tags: ${{ github.event_name == 'workflow_dispatch' && inputs.integration_tests_tags || '' }}
     secrets:
-      AWS_S3_ACCESS_KEY_ID: ${{secrets.AWS_S3_ACCESS_KEY_ID}}
-      AWS_S3_ACCESS_KEY_SECRET: ${{secrets.AWS_S3_ACCESS_KEY_SECRET}}
+      AWS_S3_ACCESS_KEY_ID: ${{ secrets.S3_AWS_ACCESS_KEY_ID }}
+      AWS_S3_ACCESS_KEY_SECRET: ${{ secrets.S3_AWS_SECRET_ACCESS_KEY }}
