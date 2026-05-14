@@ -14,5 +14,5 @@ charts:
       - ghcr.io/netcracker/qubership-docker-zookeeper:${release}
       - ghcr.io/netcracker/qubership-zookeeper-monitoring:${release}
       - ghcr.io/netcracker/qubership-zookeeper-backup-daemon:${release}
-      - ghcr.io/elbe0116/qubership-zookeeper-integration-tests:${release}
+      # integration-tests: tag only in values.yaml — charts-values-update checks GHCR and falls back to default-tag main if the branch tag is absent.
       - ghcr.io/netcracker/qubership-docker-kubectl:#latest
