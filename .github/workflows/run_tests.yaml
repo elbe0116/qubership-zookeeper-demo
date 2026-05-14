@@ -61,12 +61,12 @@ jobs:
   Zookeeper-Pipeline:
     needs: Wait-for-images
     # Pinned fork: ATP S3 creds via helm_deploy --set-string; repo secrets S3_AWS_* mapped to workflow_call secrets.
-    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@40c6c95927e11ecf1038e0489eba9f6cf2817ec2
+    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@d5555c016400519192f6d14fedaf82715ab67057
     with:
       # Same repo as the workflow: chart + dev_build images (GHCR under this org). Override via workflow_dispatch if needed.
       repository_name: ${{ github.event_name == 'workflow_dispatch' && (inputs.repository_name != '' && inputs.repository_name || github.repository) || github.repository }}
       service_branch: ${{ github.event_name == 'workflow_dispatch' && inputs.service_branch || (github.head_ref || github.ref_name) }}
-      pipeline_branch: '40c6c95927e11ecf1038e0489eba9f6cf2817ec2'
+      pipeline_branch: 'd5555c016400519192f6d14fedaf82715ab67057'
       test_tags: ${{ github.event_name == 'workflow_dispatch' && inputs.integration_tests_tags || '' }}
     secrets:
       AWS_S3_ACCESS_KEY_ID: ${{ secrets.S3_AWS_ACCESS_KEY_ID }}
