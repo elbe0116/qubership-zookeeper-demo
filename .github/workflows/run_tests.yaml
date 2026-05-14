@@ -59,12 +59,12 @@ jobs:
           poll-interval: 20
   Zookeeper-Pipeline:
     needs: Wait-for-images
-    # Pinned fork commit: prepare 404 fallback, test_tags, verify dump on failure, incremental check_tests log tail.
-    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@c3287f968c5c984388350da821b656dba957ee66
+    # Pinned fork commit: 404/test_tags + check_tests tail + verify dump on failure + check_resources tail while 0/1.
+    uses: elbe0116/qubership-test-pipelines/.github/workflows/zookeeper.yaml@60a194167ab493d14594e646842874712fab9754
     with:
       repository_name: ${{ github.event_name == 'workflow_dispatch' && (inputs.repository_name != '' && inputs.repository_name || github.repository) || 'Netcracker/qubership-zookeeper' }}
       service_branch: ${{ github.event_name == 'workflow_dispatch' && inputs.service_branch || (github.head_ref || github.ref_name) }}
-      pipeline_branch: 'c3287f968c5c984388350da821b656dba957ee66'
+      pipeline_branch: '60a194167ab493d14594e646842874712fab9754'
       test_tags: ${{ github.event_name == 'workflow_dispatch' && inputs.integration_tests_tags || '' }}
     secrets:
       AWS_S3_ACCESS_KEY_ID: ${{secrets.AWS_S3_ACCESS_KEY_ID}}
